@@ -1,0 +1,41 @@
+# Copy to rproxy.toml and replace all example credentials before starting rproxy.
+schema_version = 1
+
+[listener]
+address = "0.0.0.0:6379"
+
+[upstream]
+# `standalone` is the default. Use `cluster` with `bootstrap_endpoints` below
+# to discover a Redis or Valkey Cluster topology.
+kind = "standalone"
+# A plain TCP Redis or Valkey standalone endpoint.
+address = "redis.redis.svc.cluster.local:6379"
+# username = "default" # Optional Redis ACL username for the upstream.
+# password = "replace-with-upstream-password"
+# Cluster example:
+# kind = "cluster"
+# bootstrap_endpoints = [
+#   "redis-0.redis.svc.cluster.local:6379",
+#   "redis-1.redis.svc.cluster.local:6379",
+# ]
+
+[limits]
+max_frame_bytes = 1048576
+# Maximum commands queued after MULTI before EXEC or DISCARD.
+max_pipeline_depth = 128
+max_upstream_connections = 64
+request_timeout_ms = 1000
+# Bound concurrent downstream sockets and disconnect sessions that remain idle.
+max_client_connections = 1024
+client_idle_timeout_ms = 300000
+
+[observability]
+metrics_address = "0.0.0.0:9090"
+
+[[tenants]]
+# Tenant IDs and partition counts are data-layout settings. Do not change either
+# after this tenant writes data without an explicit migration.
+id = "payments"
+# username = "payments-app" # Enables AUTH <username> <password>.
+password = "replace-with-password"
+partition_count = 256
