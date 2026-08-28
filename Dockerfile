@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM rust:1.97-bookworm AS builder
+FROM rust:1.98-bookworm AS builder
 WORKDIR /app
 
 # Copy manifests first so dependency resolution remains cached while application
